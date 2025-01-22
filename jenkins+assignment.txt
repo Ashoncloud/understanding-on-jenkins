@@ -1,0 +1,454 @@
+1. L1 - Create Jenkins Master-Slave Configurations
+and Create a workspace in Jenkins Slave Node
+using Jenkins Free-style project
+
+step 1 : Install and Configure Jenkins in jenkins Master Node
+1.1 : Launch AWS EC2 Instance - AMI - Ubuntu 22.04v 
+1.2 : Updated Inbound Rule - Port 8080 
+1.3 : connect the node through mobaxterm
+1.4 : Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+1.5 : Install Jenkins with the following commands 
+a. sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+b. echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+c. sudo apt-get update
+d. sudo apt-get install jenkins -y
+e. jenkins --version
+f. systemctl status jenkins
+g. jenkins --version 
+h. systemctl status jenkins 
+i. systemctl stop jenkins 
+j. systemctl start jenkins 
+k. systemctl restart jenkins 
+l. systemctl enable jenkins 
+m. Open web browser and enter http://<Public_IP_Address>:8080/ (http://13.201.74.188:8080/)
+n. cmd : cat /var/lib/jenkins/secrets/initialAdminPassword for password
+o. enter password and install suggested plugins
+p. Create first admin User and start using jenkins
+q. jenkins Master node is created  with git , jdk and jenkins
+
+Step 2: Create Jenkins Master-Slave Configurations with the help of SSH connection between Jenkins_Master and Slave Nodes
+2.1. Create slave node instace with the help of ec2 ubuntu instance
+2.2. connect the slave node through mobaxterm
+2.3. Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+2.4. Install maven with the following commands
+a. sudo apt install maven -y
+b. mvn --version
+2.5 . Create User in Jenkins Slave Machine & Create SSH Keys with following steps.
+a. useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+b. su - devopsadmin
+c. ls -a
+d. ssh-keygen -t ecdsa -b 521	
+e. ls -a
+f. cd .ssh/
+g. ls
+h. ll
+i. cat id_ecdsa.pub > authorized_keys
+j. chmod 600 /home/devopsadmin/.ssh/*
+k. slave node is ready
+2.6. Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
+a. Goto to Manage Jenkins  > Select Nodes  >On Nodes Dashboard, Click on New Node > Give Node Name, and choose permanent agent.
+b. Enter Name , Description , Number of executors, update the Remote root directory, labels(uniquly identify agent in pipeline).
+c. launch method select launch agents via SSH
+d. Host - private ip adress of the instance.
+e. Jenkins credential manager > slect SSH Username with private key > enter username of the user created in Mobaxterm for slave node > enter ID and Description.
+f. In prevate key section tap on Enter directly > paste the private key and click on add
+g. Host verification strategy select Manual trusted key Verification strategy
+h. click save now slave node is created
+i. Click on the node name > click Trust ssh host key > select Yes
+
+Step 3 : Create a workspace in Jenkins Slave Node
+using Jenkins Free-style project
+3.1 . Create a New Project:
+a. On the Jenkins Dashboard, click New Item.
+b. Enter a name for the project, and select Freestyle project.
+c. Click OK to create the project.
+3.2 Assign the Project to the Slave Node
+a. In the job configuration, scroll down to the General section.
+b. Check the box Restrict where this project can be run.
+c. In the Label Expression field, enter the label of the slave node (for example, linux, Slave-Node-1, or any label you've set in the slave configuration).
+3.3 Configure Build Steps:
+a. In the Build section, you can configure steps such as:
+        Execute shell commands (for Linux nodes).
+b. Save the Project
+3.4 Verify the Workspace on Slave Node to build the JOB.
+a. On the job page, click Build Now.
+b. Jenkins will start the build process on the slave node, and the workspace will be created there.  
+c. You can access the workspace via the slave node’s file system, or you can use Jenkins to display workspace contents.
+
+__________________________________________________
+
+2. L2 - Create CICD Pipeline to Clone and Build
+Java Maven Web Application
+
+step 1 : Install and Configure Jenkins in jenkins Master Node
+1.1 : Launch AWS EC2 Instance - AMI - Ubuntu 22.04v 
+1.2 : Updated Inbound Rule - Port 8080 
+1.3 : connect the node through mobaxterm
+1.4 : Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+1.5 : Install Jenkins with the following commands 
+a. sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+b. echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+c. sudo apt-get update
+d. sudo apt-get install jenkins -y
+e. jenkins --version
+f. systemctl status jenkins
+g. jenkins --version 
+h. systemctl status jenkins 
+i. systemctl stop jenkins 
+j. systemctl start jenkins 
+k. systemctl restart jenkins 
+l. systemctl enable jenkins 
+m. Open web browser and enter http://<Public_IP_Address>:8080/ (http://13.201.74.188:8080/)
+n. cmd : cat /var/lib/jenkins/secrets/initialAdminPassword for password
+o. enter password and install suggested plugins
+p. Create first admin User and start using jenkins
+q. jenkins Master node is created  with git , jdk and jenkins
+
+Step 2:  Create Jenkins Master-Slave Configurations with the help of SSH connection between Jenkins_Master and Slave Nodes
+2.1. Create slave node instace with the help of ec2 ubuntu instance
+2.2. connect the slave node through mobaxterm
+2.3. Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+2.4. Install maven with the following commands
+a. sudo apt install maven -y
+b. mvn --version
+2.5 . Create User in Jenkins Slave Machine & Create SSH Keys with following steps.
+a. useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+b. su - devopsadmin
+c. ls -a
+d. ssh-keygen -t ecdsa -b 521	
+e. ls -a
+f. cd .ssh/
+g. ls
+h. ll
+i. cat id_ecdsa.pub > authorized_keys
+j. chmod 600 /home/devopsadmin/.ssh/*
+k. slave node is ready
+2.6. Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
+a. Goto to Manage Jenkins  > Select Nodes  >On Nodes Dashboard, Click on New Node > Give Node Name, and choose permanent agent.
+b. Enter Name , Description , Number of executors, update the Remote root directory, labels(uniquly identify agent in pipeline).
+c. launch method select launch agents via SSH
+d. Host - private ip adress of the instance.
+e. Jenkins credential manager > slect SSH Username with private key > enter username of the user created in Mobaxterm for slave node > enter ID and Description.
+f. In prevate key section tap on Enter directly > paste the private key and click on add
+g. Host verification strategy select Manual trusted key Verification strategy
+h. click save now slave node is created
+i. Click on the node name > click Trust ssh host key > select Yes
+
+
+Step 3 : Create CICD Pipeline in Master Node.
+3.1 : Goto Dashboard > click on New Item 
+3.2. Enter Item and select the Template as Pipeline click OK
+
+
+
+Step 4 : Perform SCM Checkout stage
+4.1. In project configaturation scroll down to pipeline section.
+4.2. click pipeline syntax link leads to snippet generator.
+4.3. select git as a sample step , paste the Reposistory url.
+4.4. generate the pipeline script.
+4.5. git 'https://github.com/SA-Team-DevOps-03-Dec-24/java-mvn-springbootapp.git' copy the script this process is called SCM_checkout
+
+Step 5: perform application Build Stage
+5.1. In Pipeline synxtax page
+5.2. select sh:Shell Script as a sample step , enter mvn clean package as the Reposistory url.
+5.3. generate the pipeline script.
+5.4. sh 'mvn clean package ' copy this command for your script
+
+
+Step 6 : configure Script in the Pipeline Project based on the SCM checkout and application build stage to Clone and Build
+Java Maven Web Application.
+6.1 Paste the below script in the configuration page under script section
+pipeline {
+    agent { label 'slave1' }
+
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+               echo "Perform SCM Checkout"
+			   git 'https://github.com/SA-Team-DevOps-03-Dec-24/java-mvn-springbootapp.git'			   
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo "Perform Application Build"
+				sh 'mvn clean package'
+            }
+        }
+        stage('Deploy to Test Server') {
+            steps {
+                echo "Perform Application Deployment"
+            }
+        }
+    }
+}	
+6.2. Save the project Run with the help of Build now 
+6.3. Now verify with following linux commands in the mobaxterm able to see the Git repo is cloned in the slave node.
+a. ls
+b. cd workspace/
+c. ls
+d. cd SA-Pipeline-clone1/
+e. ls
+
+----------------------------------------------------------------------------------------------------
+
+3. L3 - Create CICD Pipeline to Deploy the Maven
+Web Application in Tomcat Server
+
+step 1 : Install and Configure Jenkins in jenkins Master Node
+1.1 : Launch AWS EC2 Instance - AMI - Ubuntu 22.04v 
+1.2 : Updated Inbound Rule - Port 8080 
+1.3 : connect the node through mobaxterm
+1.4 : Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+1.5 : Install Jenkins with the following commands 
+a. sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+b. echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+c. sudo apt-get update
+d. sudo apt-get install jenkins -y
+e. jenkins --version
+f. systemctl status jenkins
+g. jenkins --version 
+h. systemctl status jenkins 
+i. systemctl stop jenkins 
+j. systemctl start jenkins 
+k. systemctl restart jenkins 
+l. systemctl enable jenkins 
+m. Open web browser and enter http://<Public_IP_Address>:8080/ (http://13.201.74.188:8080/)
+n. cmd : cat /var/lib/jenkins/secrets/initialAdminPassword for password
+o. enter password and install suggested plugins
+p. Create first admin User and start using jenkins
+q. jenkins Master node is created  with git , jdk and jenkins
+
+Step 2:  Create Jenkins Master-Slave Configurations with the help of SSH connection between Jenkins_Master and Slave Nodes
+2.1. Create slave node instace with the help of ec2 ubuntu instance
+2.2. connect the slave node through mobaxterm
+2.3. Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install git -y
+d. sudo apt install openjdk-17-jre -y
+e: java -version
+2.4. Install maven with the following commands
+a. sudo apt install maven -y
+b. mvn --version
+2.5 . Create User in Jenkins Slave Machine & Create SSH Keys with following steps.
+a. useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+b. su - devopsadmin
+c. ls -a
+d. ssh-keygen -t ecdsa -b 521	
+e. ls -a
+f. cd .ssh/
+g. ls
+h. ll
+i. cat id_ecdsa.pub > authorized_keys
+j. chmod 600 /home/devopsadmin/.ssh/*
+k. slave node is ready
+2.6. Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
+a. Goto to Manage Jenkins  > Select Nodes  >On Nodes Dashboard, Click on New Node > Give Node Name, and choose permanent agent.
+b. Enter Name , Description , Number of executors, update the Remote root directory, labels(uniquly identify agent in pipeline).
+c. launch method select launch agents via SSH
+d. Host - private ip adress of the instance.
+e. Jenkins credential manager > slect SSH Username with private key > enter username of the user created in Mobaxterm for slave node > enter ID and Description.
+f. In prevate key section tap on Enter directly > paste the private key and click on add
+g. Host verification strategy select Manual trusted key Verification strategy
+h. click save now slave node is created
+i. Click on the node name > click Trust ssh host key > select Yes
+
+
+Step 3 : Create CICD Pipeline in Master Node.
+3.1 : Goto Dashboard > click on New Item 
+3.2. Enter Item and select the Template as Pipeline click OK
+
+
+
+Step 4 : Perform SCM Checkout stage
+4.1. In project configaturation scroll down to pipeline section.
+4.2. click pipeline syntax link leads to snippet generator.
+4.3. select git as a sample step , paste the Reposistory url.
+4.4. generate the pipeline script.
+4.5. git 'https://github.com/SA-Team-DevOps-03-Dec-24/java-mvn-springbootapp.git' copy the script this process is called SCM_checkout
+
+Step 5: perform application Build Stage
+5.1. In Pipeline synxtax page
+5.2. select sh:Shell Script as a sample step , enter mvn clean package as the Reposistory url.
+5.3. generate the pipeline script.
+5.4. sh 'mvn clean package ' copy this command for your script
+
+
+Step 6 : configure Script in the Pipeline Project based on the SCM checkout and application build stage to Clone and Build
+Java Maven Web Application.
+6.1 Paste the below script in the configuration page under script section
+pipeline {
+    agent { label 'slave1' }
+
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+               echo "Perform SCM Checkout"
+			   git 'https://github.com/SA-Team-DevOps-03-Dec-24/java-mvn-springbootapp.git'			   
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo "Perform Application Build"
+				sh 'mvn clean package'
+            }
+        }
+        stage('Deploy to Test Server') {
+            steps {
+                echo "Perform Application Deployment"
+            }
+        }
+    }
+}	
+6.2. Save the project Run with the help of Build now 
+6.3. Now verify with following linux commands in the mobaxterm able to see the Git repo is cloned in the slave node.
+a. ls
+b. cd workspace/
+c. ls
+d. cd SA-Pipeline-clone1/
+e. ls
+f. .war file is created in the slave node inside Target file.
+
+Step 7: Launch one Virtual machine and Install Tomcat for Tomcat_Server(VM).
+7.1. Create one instance in EC2 with port 8080 inbound rule.
+7.2. Connect the instance in Mobaxterm.
+7.3. Install java with the Following commands
+a. sudo -i
+b. sudo apt update -y
+c. sudo apt install openjdk-17-jre -y
+d: java -version
+7.4 Install Tomcat with the following steps.
+a. cd /opt/
+b. wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.99/bin/apache-tomcat-8.5.99.tar.gz
+c. tar -xvzf /opt/apache-tomcat-8.5.99.tar.gz
+d. mv apache-tomcat-8.5.99 tomcat
+e. cd tomcat/bin/
+f. ./startup.sh	
+g. http://<Public_IP_Address>:8080/ paste the URL in the browser and verify tomcat is installed properly
+
+Step 8: Create User in Tomcat VM  & Create SSH Keys with following steps.
+a. useradd tomcatadmin -s /bin/bash -m -d /home/tomcatadmin
+b. su - tomcatadmin
+c. ls -a
+d. ssh-keygen -t ecdsa -b 521	
+e. ls -a
+f. cd .ssh/
+g. ls
+h. ll
+i. cat id_ecdsa.pub > authorized_keys
+j. chmod 600 /home/tomcatadmin/.ssh/*
+k. cd .ssh/
+l. cd /opt/tomcat
+m. ls 
+n. ll
+o. exit
+p. make tomcatadmin user as a owner to tomcat dir : "chown -R tomcatadmin /opt/tomcat" then only we can able to make deployment
+q. su - tomcatadmin
+r. cd /opt/tomcat
+s. cd webapps/
+t. ls Verify whether the user has access to that folder
+
+Step 9 : Working with Tomcat & Deployment - CICD Pipeline 
+9.1 : go to Jenkins portal
+9.2: Go to plugin and Install Publish Over SSH plugin in Jenkins Master is used to copt the artificats from Slave Node to tomcat server.
+9.3. Go to manage jenkins > system > Scroll down to Publish Over SSH section > add ssh server
+9.4. SSH sever > enter server > paste the private Ip of tomcat server and paste in the host name > tomcat username should be pasted in the Username section.
+9.5. target folder path should be pasted in the Remote Directory(/opt/tomcat/webapps)
+9.6. Select advanced option > enable Use password Authentication checkbox > copy paste the private key of tomcatadmin user
+9.7. select Test Configuration if sucess message displayed means select save.
+9.8. go to pipeline configuration > select pipeline syntax > In snippet generator select ssh Publisher in the sample step > Enter Source file path (target/*.war) > . in Remote directory > target/ paste in the Remove prefix section > select generate pipeline script 
+9.9 Paste the pipeline script in the config section of the pipeline and click save
+9.10 . select build now > go to tomcat server and enter ls able to see war file copy to the machine.
+
+----------------------------------------------------------------------------------------------------------
+4. L4 - Automate the CICD Pipeline using GitHub
+webhook and Poll-SCM
+
+
+
+Step : Automate CICD Pipeline using GitHub webhook
+a. Used to trigger the jenkins Job whenever there is any commit happened in the remote repository
+b. github webhook has be configured in the remote repository by using the jenkins URL
+c. Go to gitbub Repository which is configured to the pipelie select settings.
+d. In settings landing page select Webhooks and click add webhook
+e. In Add webhook landing page In Payload url section enter Jenkins URL + github-webhook " http://13.203.159.173:8080/github-webhook/"
+f. content format select Json
+g. in event trigger section choose based on your need (just the push event )
+h. enable webhook as active select add webhook.
+i. Go to pipeline project config section enable webhook.
+j. now edit the Reposistory and commit it.
+k. In Pipeline Job automatically Triggred by the Github webhook.
+l. In console output you can see it was triaggred automatically "Started by GitHub push by Deepak1998226"
+
+Step : Automate CICD Pipeline using Poll-SCM
+a. It is used to trigger the build based on the crontab only if there is any changes happened in the source-code repository.
+b. It is the combination of Both Build Periodic and GitHub webhook
+c. Go to pipeline configuration page > In Triggers section enable POll SCM > In shedule section paste "* * * * *" based on the test cycle and select save.
+d. now edit the Reposistory and commit it.
+e. In Pipeline Job automatically Triggred by the SCM.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
